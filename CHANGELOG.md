@@ -10,6 +10,26 @@ Release process: [docs/operators/release-process.md](docs/operators/release-proc
 
 ### Added
 
+- **A Swedish site is Swedish from the first day.** What a visitor reads on
+  the platform's own pages (the shop, the checkout, the customer portal, the
+  booking, quote, agreement and invoice pages, the invoice PDF, the ticket and
+  booking mails) was English until someone had the instance translated — and
+  whatever was added later stayed English. The platform now ships its own
+  Swedish for all 611 visitor texts, used wherever the reader's language is
+  Swedish and the instance has no wording of its own. An instance's own
+  wording still wins.
+  The customer portal's menu, title and sign-out, and three mails that were
+  English for everyone — the receipt of an accepted quote, the receipt of a
+  signed agreement and the invitation to the portal — are visitor texts in
+  the site's language now.
+
+- **A quote or an invoice for a customer who is not a contact yet.** New Quote
+  and New Invoice offered a list of existing contacts and nothing else: to
+  invoice someone new, a person had to leave, create the contact and start
+  over. Both dialogs take a new customer's name and e-mail in place; the
+  contact is created with the draft, and an address that already has a contact
+  uses that contact.
+
 - **The core customer mails exist in Swedish.** On an instance whose site
   language is Swedish, the invoice, the quote, the agreement, their reminders,
   the booking confirmation and the order confirmation existed in English only,
@@ -44,6 +64,11 @@ Release process: [docs/operators/release-process.md](docs/operators/release-proc
   The nightly customer path does it in a browser.
 
 ### Removed
+
+- **The "auto-pay delay" in the shop's sandbox mode is gone.** The slider
+  promised that a test order would be paid after N days; nothing ever paid it,
+  so a value above zero left the order pending for ever. A test-mode order is
+  paid at once. No instance had it set.
 
 - **The Global Elements module is gone.** It had no skills and no tables and was
   hidden ("merged into Pages"); its one effect was to be switched on by accident
@@ -168,6 +193,24 @@ Release process: [docs/operators/release-process.md](docs/operators/release-proc
   translatable and calls a paid invoice a receipt. The PDF is still in English.
 
 ### Fixed
+
+- **The lines the code adds to a booking confirmation follow the mail's
+  language.** A Swedish confirmation for a video meeting carried "Join the
+  meeting:" in English, and the note the customer wrote was put into the mail
+  unescaped in an older template shape. Both are visitor texts now.
+
+- **A reset no longer takes the mail templates with it.** The nightly rebuild
+  of the sandbox emptied the mail templates and nothing put them back, so every
+  mail it sent was the built-in English fallback; "reset site data" on a real
+  instance had the same hole. A rebuilt sandbox gets the platform's templates
+  back, a site reset keeps the business's own, and an instance that already
+  lost them has them restored.
+- **Every invoice series runs in order.** Invoices made from an agreement, a
+  subscription period, a subscription change and a service order were numbered
+  with five random digits (`CTR-20261119-48213`): no running series, and two
+  the same day could draw the same number and fail the billing run. Each has
+  its own series now, `CTR-2026-00001`, `SUB-…`, `SUB-ADJ-…`, `SO-…`, one
+  counter per year. Invoices already numbered keep their number.
 
 - **An invoice no longer tells the customer where it was generated from.** The
   customer's invoice page and PDF read "Notes — Generated from contract
